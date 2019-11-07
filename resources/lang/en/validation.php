@@ -146,6 +146,9 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'text_field'            => 'Text field',
+        'area_field'            => 'Area field',
+    ],
 
 ];
