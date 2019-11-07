@@ -6,6 +6,7 @@ use App\Test;
 use Illuminate\Http\Request;
 use App\Http\Requests\TestStoreRequest;
 use App\Http\Requests\TestUpdateRequest;
+use App\Jobs\SendEmailTestJob;
 
 class TestController extends Controller
 {
@@ -40,6 +41,11 @@ class TestController extends Controller
     {
         try {
             $test = Test::create($request->all());
+
+            $method = 'CREATE';
+            $title  = $test->text_field;
+            $body   = $test->area_field;
+            $this->sendEmail($method, $title, $body);
             
             return redirect()->route('tests.index', $test->id)
             ->with('info', 'Registro creado con exito');
@@ -87,15 +93,27 @@ class TestController extends Controller
     {
         try {
             $test->update($request->all());
+            
+            $method = 'UPDATE';
+            $title  = $test->text_field;
+            $body   = $test->area_field;
+            $this->sendEmail($method, $title, $body);
 
             return redirect()->route('tests.edit', $test->id)
             ->with('info', 'Registro modificado satisfactoriamente!');
 
         } catch (\Throwable $th) {
-            //throw $th;
-            //return redirect()->route('tests.edit', $test->id)->with($notification);
+            throw $th;
             return back()->with('error', 'Error al editar el registro');
         }
+    }
+
+    private function sendEmail($method, $title, $body){
+        $details['email'] = config('mail.username');
+        $details['method'] = $method;
+        $details['title'] = $title;
+        $details['body']  = $body;
+        SendEmailTestJob::dispatch($details);
     }
 
     /**
