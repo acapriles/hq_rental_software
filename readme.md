@@ -42,7 +42,7 @@
 - php artisan serve
 - php artisan queue:listen
 
-## Para probar el comando de consola Artisan para el envío de correo se puede ejecutar el siguiente instrucción: 
+## Para probar el comando de consola Artisan para el envío de correo se puede ejecutar la siguiente instrucción: 
 - php artisan send:email
 
 ## Se debe configurar el cron del sistema para probar el envío de correos por hora o ejecutar el siguiente comando por la consola:
